@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="nextPage">next page</string>
+    <string name="button_text">Put on me</string>
+    <string name="calcText">zhan_Calc</string>
+    <string name="hint1">Input first num</string>
+    <string name="hint2">Input second num</string>
+    <string name="btnPlus">+</string>
+    <string name="btnMinus">-</string>
+    <string name="btnDivide">/</string>
+    <string name="btnMultiple">*</string>
+</resources>

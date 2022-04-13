@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="logoTptk" type="id">logo</item>
+    <item name="boy" type="id" />
+    <item name="girl" type="id" />
+</resources>

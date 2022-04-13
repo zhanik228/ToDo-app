@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Main2"
+    android:background="#ddd">
+
+    <RelativeLayout
+        android:id="@+id/textView_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_700">
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:textSize="36sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        />
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="logout"
+            android:backgroundTint="@color/teal_200"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_margin="15dp"
+        android:padding="15dp"
+        android:layout_below="@+id/textView_profile">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userNameSet"
+            android:hint="UserName"
+            android:layout_marginBottom="10dp"
+            >
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_username"
+            android:drawablePadding="10dp"
+            android:text="Loading"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/emailSet"
+            android:hint="Email"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/userNameSet"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:drawableStart="@drawable/ic_username"
+                android:drawablePadding="10dp"
+                android:text="Loading"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/changePassBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emailSet"
+            android:layout_marginRight="20dp"
+            android:text="changePassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/saveChanges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save changes"
+            android:layout_toRightOf="@+id/changePassBtn"
+            android:layout_below="@+id/emailSet"/>
+
+    </RelativeLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:itemBackground="@color/purple_200"
+        app:menu="@menu/menu_main"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottomNav"
+        app:labelVisibilityMode="labeled"/>
+
+</RelativeLayout>

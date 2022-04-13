@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#ccc"
+    >
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/logo"
+            android:maxWidth="180dp"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome to ToDo App"
+            android:id="@+id/textView_main_head"
+            android:layout_below="@+id/logo"
+            android:layout_marginTop="30dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="70dp"
+            android:text="Login" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginBtn"
+            android:text="OR sign in with"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/googleBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginBtn"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="70dp"
+            android:text="Register" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/googleBtn"
+            android:layout_centerHorizontal="true"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:text="Don't have an account? You can "
+                android:id="@+id/textViewRegister"
+                android:layout_below="@+id/googleBtn"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:text="register here"
+                android:id="@+id/textViewRegisterBtn"
+                android:layout_below="@+id/googleBtn"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/teal_200" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</ScrollView>
