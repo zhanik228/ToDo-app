@@ -25,10 +25,10 @@
             android:name=".ChangePassword"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".LogAndReg.Login"
             android:exported="false" />
         <activity
-            android:name=".Register"
+            android:name=".LogAndReg.Register"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

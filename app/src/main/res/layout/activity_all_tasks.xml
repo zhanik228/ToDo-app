@@ -6,15 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".Completed"
     android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
+    
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/homeToolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="All tasks"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="48sp"
-        />
+        android:background="#000"/>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fab"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_baseline_add_24"
+            android:backgroundTint="@color/teal_200"/>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

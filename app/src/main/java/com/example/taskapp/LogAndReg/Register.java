@@ -1,4 +1,4 @@
-package com.example.taskapp;
+package com.example.taskapp.LogAndReg;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.taskapp.Main2;
+import com.example.taskapp.R;
+import com.example.taskapp.ReadAndWriteUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
