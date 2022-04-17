@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:elevation="10dp"
     app:cardElevation="10dp"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +39,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <TextView
+                android:backgroundTint="#eee"
+                android:background="@drawable/border"
                 android:id="@+id/taskTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,6 +55,9 @@
                 android:textColor="#000"/>
 
             <TextView
+                android:padding="6dp"
+                android:backgroundTint="#eee"
+                android:background="@drawable/border"
                 android:id="@+id/descriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,6 +66,40 @@
                 android:text="Description"
                 android:textSize="15sp"
                 android:maxLines="3"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4"
+                android:backgroundTint="@color/teal_700"
+                android:background="@drawable/border"
+                >
+            <TextView
+                android:id="@+id/datetoDo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textColor="#fff"
+                android:text="Date to do: "
+                android:textSize="15sp"
+                android:maxLines="3" />
+
+                <TextView
+                    android:padding="5dp"
+                    android:id="@+id/datetoDoTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textColor="#000"
+                    android:text="Dateadfasdf"
+                    android:textAlignment="textEnd"
+                    android:textSize="15sp"
+                    android:maxLines="3"
+                    android:layout_weight="3"
+                    android:background="@drawable/border"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

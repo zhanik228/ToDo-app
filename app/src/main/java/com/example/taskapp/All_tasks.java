@@ -7,15 +7,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,48 +38,59 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class All_tasks extends AppCompatActivity {
 
+    private Toolbar toolbar;
+    private RecyclerView recyclerView;
+    private FloatingActionButton floatingActionButton;
+    private EditText task, description;
+    private EditText dateToDo;
+    private Button saveBtn, cancelBtn;
+    private LinearLayoutManager linearLayoutManager;
     private ProgressDialog loader;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private DatabaseReference reference;
+    private String onlineUserID;
 
-    FloatingActionButton floatingActionButton;
-    RecyclerView recyclerView;
-    Toolbar toolbar;
-    DatabaseReference reference;
+    private String key = "";
+    private String taskk;
+    private String descriptionn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_tasks);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        String onlineUserID = mUser.getUid();
-        reference = FirebaseDatabase
-                .getInstance().getReference().child("myTasks").
-                        child(onlineUserID);
+        loader = new ProgressDialog(this);
 
-        floatingActionButton = findViewById(R.id.fab);
-        recyclerView = findViewById(R.id.recyclerView);
-        toolbar = findViewById(R.id.homeToolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("ToDo");
+        getSupportActionBar().setTitle("ToDo App");
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
+        recyclerView = findViewById(R.id.recyclerView);
+        linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        onlineUserID = mUser.getUid();
+        reference = FirebaseDatabase.getInstance().getReference().child("Tasks").child(onlineUserID);
 
+        floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addTask();
             }
         });
+
 
 
 
@@ -112,81 +129,88 @@ public class All_tasks extends AppCompatActivity {
     }
 
     private void addTask() {
-        loader = new ProgressDialog(this);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        String onlineUserID = mUser.getUid();
-        reference = FirebaseDatabase
-                .getInstance().getReference().child("myTasks").
-                        child(onlineUserID);
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
-
-        View myView = inflater.inflate(R.layout.input_file,null);
-        builder.setView(myView);
-
+        View myView = inflater.inflate(R.layout.input_file, null);
         AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
+        dialog.setView(myView);
         dialog.show();
 
-        final EditText task = myView.findViewById(R.id.task);
-        final EditText description = myView.findViewById(R.id.description);
-        Button save = myView.findViewById(R.id.saveBtn);
-        Button cancel = myView.findViewById(R.id.Cancel);
+        cancelBtn = myView.findViewById(R.id.cancelBtn);
+        saveBtn = myView.findViewById(R.id.saveBtn);
 
-        cancel.setOnClickListener(new View.OnClickListener() {
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
 
-        save.setOnClickListener(new View.OnClickListener() {
+        dateToDo = myView.findViewById(R.id.dateToDo);
+
+
+        dateToDo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mTask = task.getText().toString();
-                String mDescription = description.getText().toString();
+                final Calendar calendar = Calendar.getInstance();
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+
+                DatePickerDialog pickerDialog = new DatePickerDialog(All_tasks.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        int plusMonth = i1+1;
+                        dateToDo.setText(i2 + "/" + plusMonth + "/" + i);
+                    }
+                },year,month,day);
+                pickerDialog.show();
+            }
+        });
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task = myView.findViewById(R.id.task);
+                description = myView.findViewById(R.id.description);
+
+                String mTask = task.getText().toString().trim();
+                String mDescription = description.getText().toString().trim();
                 String id = reference.push().getKey();
                 String date = DateFormat.getDateInstance().format(new Date());
+                String mdateToDo = dateToDo.getText().toString().trim();
 
                 if(TextUtils.isEmpty(mTask)) {
                     task.setError("Task required");
-                    return;
+                    task.requestFocus();
                 }
                 if(TextUtils.isEmpty(mDescription)) {
                     description.setError("Description required");
-                    return;
-                }   else {
+                    description.requestFocus();
+                }else {
                     loader.setMessage("Adding your data");
                     loader.setCanceledOnTouchOutside(false);
                     loader.show();
 
-                    Model model = new Model(mTask, mDescription,id, date);
+                    Model model = new Model(mTask, mDescription, id, date,mdateToDo);
                     reference.child(id).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(),
-                                        "task has been initialized succesfully",
-                                        Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Added succesfully", Toast.LENGTH_LONG).show();
                                 loader.dismiss();
                             }else {
-                                String error = task.getException().toString();
-                                Toast.makeText(getApplicationContext(),
-                                        "Failed",
-                                        Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                                 loader.dismiss();
                             }
                         }
                     });
-
                 }
                 dialog.dismiss();
+
             }
         });
-        dialog.show();
 
     }
 
@@ -195,7 +219,7 @@ public class All_tasks extends AppCompatActivity {
         super.onStart();
 
         FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
-                .setQuery(reference,Model.class)
+                .setQuery(reference, Model.class)
                 .build();
 
         FirebaseRecyclerAdapter<Model, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Model, MyViewHolder>(options) {
@@ -203,8 +227,18 @@ public class All_tasks extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Model model) {
                 holder.setDate(model.getDate());
                 holder.setTask(model.getTask());
-                holder.setDescription(model.getDescription());
+                holder.setDesc(model.getDescription());
+                holder.setPlanToDo(model.getPlanToDate());
 
+                holder.myView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        key = getRef(position).getKey();
+                        taskk = model.getTask();
+                        descriptionn = model.getDescription();
+                        updateTask();
+                    }
+                });
             }
 
             @NonNull
@@ -214,32 +248,126 @@ public class All_tasks extends AppCompatActivity {
                 return new MyViewHolder(view);
             }
         };
-
         recyclerView.setAdapter(adapter);
         adapter.startListening();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        View mView;
 
+        View myView;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            mView = itemView;
+            myView = itemView;
         }
 
         public void setTask(String task) {
-            TextView taskTextView = mView.findViewById(R.id.taskTv);
+            TextView taskTextView = myView.findViewById(R.id.taskTv);
             taskTextView.setText(task);
         }
 
-        public void setDescription(String desc) {
-            TextView descTextView = mView.findViewById(R.id.descriptionTv);
+        public void setDesc(String desc) {
+            TextView descTextView = myView.findViewById(R.id.descriptionTv);
             descTextView.setText(desc);
         }
 
         public void setDate(String date) {
-            TextView dateTextView = mView.findViewById(R.id.dateTv);
+            TextView dateTextView = myView.findViewById(R.id.dateTv);
             dateTextView.setText(date);
         }
+
+        public void setPlanToDo(String planToDo) {
+            TextView planTextView = myView.findViewById(R.id.datetoDoTv);
+            planTextView.setText(planToDo);
+        }
     }
+
+    private void updateTask() {
+        AlertDialog.Builder myDialog = new AlertDialog.Builder(All_tasks.this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.update_data, null);
+        myDialog.setView(view);
+        AlertDialog dialog = myDialog.create();
+
+        EditText mTask = view.findViewById(R.id.mEditTextTask);
+        EditText mDescription = view.findViewById(R.id.mEditTextDescription);
+        EditText mDateToDo = view.findViewById(R.id.mEditTextDateToDo);
+
+
+        mTask.setText(taskk);
+        mTask.setSelection(taskk.length());
+        mDescription.setText(descriptionn);
+        mDescription.setSelection(descriptionn.length());
+
+        mDateToDo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar calendar = Calendar.getInstance();
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+                DatePickerDialog pickerDialog = new DatePickerDialog(All_tasks.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        mDateToDo.setText(i2 + "/" + i1 + "/" + i);
+                    }
+                },year,month,day);
+                pickerDialog.show();
+            }
+        });
+
+        Button delButton = view.findViewById(R.id.btnDelete);
+        Button updButton = view.findViewById(R.id.btnUpdate);
+
+        updButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskk = mTask.getText().toString().trim();
+                descriptionn = mDescription.getText().toString().trim();
+                String dateToDo = mDateToDo.getText().toString().trim();
+
+                String date = DateFormat.getDateInstance().format(new Date());
+
+                Model model = new Model(taskk,descriptionn, key, date, dateToDo);
+                reference.child(key).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Data updated successfully"
+                            ,Toast.LENGTH_LONG).show();
+                        }else {
+                            String error = task.getException().toString();
+                            Toast.makeText(getApplicationContext(), "update failed" + error, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                dialog.dismiss();
+            }
+        });
+
+        delButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reference.child(key).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Task deleted successfully"
+                            , Toast.LENGTH_LONG).show();
+                        }else {
+                            String error = task.getException().toString();
+                            Toast.makeText(getApplicationContext(), "Failed to delete" + error,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+    }
+
 }

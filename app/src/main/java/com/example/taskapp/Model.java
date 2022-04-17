@@ -2,17 +2,23 @@ package com.example.taskapp;
 
 public class Model {
 
-    private String task, description, id, date;
+    private String task, description, id, date, planToDate;
 
     public Model() {}
 
-    public Model(String task, String description, String id, String date) {
+
+    public Model(String task, String description, String id, String date, String planToDate) {
         this.task = task;
         this.description = description;
         this.id = id;
         this.date = date;
+        this.planToDate = planToDate;
     }
 
+
+    public String getPlanToDate() {
+        return planToDate;
+    }
 
     public String getTask() {
         return task;
